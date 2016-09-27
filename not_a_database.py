@@ -12,14 +12,13 @@ def login_info():
 def save_info(info):
     for line in better:
         if line[0] == info[0] and line[1] == info[1]:
-            print("save")
             return line
 
 
 def credential_check(info):
     for line in better:
         if line[0] == info[0] and line[1] == info[1]:
-            print("LOGIN")
+            print("LOGIN SUCCESSFUL")
             return True
         else:
             continue
@@ -59,24 +58,42 @@ def log_out():
 def edit_info(info):
     choice = input("Do you want a new (P)assword, or new (I)nformation?  ").upper()
     if choice == "P":
-        change_password(info)
+        update_password(edit_account(info,1))
+    elif choice == "I":
+        update_fact(edit_account(info,3))
 
-def change_password(info):
+
+def edit_account(info,index):
     password = "init"
     while password != info[1]:
         password = input("Enter your password here \n >")
     edit_password = input("Enter new password here \n >")
     better = open("data.csv")
     lines = list(better)
-
+    better.close()
     new =[line.split(",") for line in lines]
     for line in new:
         if line[0] == info[0]:
-            line[1] = edit_password
-        else:
-            continue
-    
+            line[index] = edit_password
+    clean = [",".join(line) for line in new]
+    return clean
+
+
+def update_password(changes):
+    better = open("data.csv", "w")
+    for line in changes:
+        better.write(line)
     better.close()
+    return program_running()
+
+def update_fact(changes):
+    better = open("data.csv", "w")
+    for line in changes:
+        better.write(line + "\n")
+    better.close()
+    return use_program(info)
+
+
 
 
 
