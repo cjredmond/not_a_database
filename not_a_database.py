@@ -3,7 +3,7 @@ with open("data.csv") as open_file:
     contents = csv.reader(open_file)
     better = list(contents)
 
-print(better)
+
 def login_info():
     login_name = input("Please enter your username below \n >")
     login_password = input("Please enter your password below \n >")
@@ -58,51 +58,50 @@ def log_out():
 def edit_info(info):
     choice = input("Do you want a new (P)assword, or new (I)nformation?  ").upper()
     if choice == "P":
-        update_password(edit_account(info,1))
-    elif choice == "I":
-        update_fact(edit_account(info,3))
+        update_password(edit_account(info,1),info)
+    #elif choice == "I":
+        #update_fact(edit_account(info,3),info)
 
 
 def edit_account(info,index):
     password = "init"
     while password != info[1]:
         password = input("Enter your password here \n >")
-    edit_password = input("Enter new password here \n >")
+    edit_subject= input("Enter new password/info here \n >")
     better = open("data.csv")
     lines = list(better)
     better.close()
     new =[line.split(",") for line in lines]
     for line in new:
         if line[0] == info[0]:
-            line[index] = edit_password
+            line[index] = edit_subject
     clean = [",".join(line) for line in new]
     return clean
 
 
-def update_password(changes):
+def update_password(changes,info):
     better = open("data.csv", "w")
     for line in changes:
         better.write(line)
     better.close()
-    return program_running()
+    return use_program(info)
 
-def update_fact(changes):
+def update_fact(changes,info):
     better = open("data.csv", "w")
     for line in changes:
         better.write(line + "\n")
     better.close()
     return use_program(info)
 
-
-
-
-
 def program_running():
     attempt = False
     while not attempt:
+        print("You are not logged in")
         stuff = login_info()
         info = save_info(stuff)
         attempt = credential_check(stuff)
+        if not attempt:
+            print("LOGIN FAILED")
     if attempt:
         use_program(info)
 
